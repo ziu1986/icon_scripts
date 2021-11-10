@@ -107,7 +107,7 @@ res_srf="${grid_refinement//0}"  # only for observational forcing
                                  # horizontal grid resolution of observation forcing
                                  # e.g. R2B4 which was interpolated from the original observation forcing 
                                  #      in T21  / T31  / T42 / T63 / T85 / T106 / T159
-forcing_fname_base="climate_gswp3_T63_d"
+forcing_fname_base="climate_gswp3_d"
 forcing_start_date="2000-01-01T00:00:00Z" # ISO 8601, in the format "1979-01-01T00:00:00Z"
                                           # It is assumed that the first forcing file name starts with this date and uses a format specification like "19790101T000000Z"
 forcing_end_date="2001-01-01T00:00:00Z"   # ISO 8601, in the format "2015-01-01T00:00:00Z". The last forcing file name not necessarily uses this date, but the file has to include this date.
@@ -591,7 +591,7 @@ if [ ${l_force_from_obs} == "true" ] ; then
         add_link_file   ${forcing_dir}/Climate_${forcing_observ_tag}_${res_srf}_${year}.nc   ./climate_${year}.nc
         ;;
         GSWP3 )
-        forcing_dir=${sep_forcing_folder}/GSWP3/DATA/gswp3_v?
+        forcing_dir=${sep_forcing_folder}/GSWP3/DATA/gswp3_v2
         add_link_file   ${forcing_dir}/${forcing_fname_base}_${year}.nc                                ./climate_${year}.nc
         ;;
         cruncep2015 )
