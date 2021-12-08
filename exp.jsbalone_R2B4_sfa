@@ -83,8 +83,8 @@ modelTimeStep="PT30M"
 # includes at least one forcing file. 
 # This will be checked below.
 #--------------------
-checkpoint_interval="P1D"
-restart_interval="P1M"
+checkpoint_interval="P1Y"
+restart_interval="P1Y"
 
 # output intervals
 #-----------------
