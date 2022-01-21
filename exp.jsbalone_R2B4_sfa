@@ -59,6 +59,8 @@ atmo_dyn_grids="'${atmo_grid_name}.nc',"                              # used for
 system_root=/home/icon
 sep_forcing_folder=${system_root}/work/mj0060/m212005/data/icon/jsbalone/${grid_id}/${revision_id}
 
+ln -s ${atmo_grid_folder}/${atmo_dyn_grids} grids/icon_grid_0013_R02B04_G.nc ~/build/grids 
+
 calendar="proleptic gregorian"  # '365 day year' or '360 day year' or 'proleptic gregorian'
 
 # start and end date+time
