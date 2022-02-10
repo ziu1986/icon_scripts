@@ -1,8 +1,10 @@
 import os, sys, glob
 import numpy as np
 import xarray as xr
+import yaml
 import matplotlib.pyplot as plt
 import datetime as dt
+
 
 def plot_global(ax, data):
     x = data['clon'].data
@@ -38,10 +40,25 @@ def read_data(src):
     data = xr.concat(data, dim='time')
     return(data)
 
+def init(config_file):
+    plt.close('all')
+    # Read configuration
+    with open(r'%s' % config_file) as file:
+        config_list = yaml.load(file, Loader=yaml.FullLoader)
+    file.close()
+    return(config_list)
+
 def main():
     plt.close('all')
-    src = os.environ['MODELS'] + "/icon/build_lnd/experiments/jsbalone_R2B4_sfa/jsbalone_R2B4_sfa_lnd_basic_ml_2000*"
+    # Load config
+    config = init("config_plot_jsb_output.yml")
+
+    src = os.environ['MODELS'] + '/icon/' + config["src"]
+    print(src)
+    b_print = config["print"]
+  
     data = read_data(src)
+    
     # Plot it
     f, ax = plt.subplots(3,1, sharex=True, sharey=True)
 
@@ -53,7 +70,9 @@ def main():
     plot_season(ax2, data)
 
     plt.show(block=False)
-    #plt.savefig("jsbach_standalone_test.png")
+
+    if b_print:
+        f.savefig("jsbach_standalone_test.png")
 
 
 if __name__ == "__main__":
