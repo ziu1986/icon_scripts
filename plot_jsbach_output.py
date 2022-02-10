@@ -4,7 +4,7 @@ import xarray as xr
 import matplotlib.pyplot as plt
 import datetime as dt
 
-def plot(ax, data, var='lai'):
+def plot_global(ax, data):
     x = data['clon'].data
     y = data['clat'].data
     lai = data.data
@@ -22,30 +22,39 @@ def plot(ax, data, var='lai'):
 
     ax.set_title(str(data.time.data)[:10])
 
-plt.close('all')
-src = os.environ['MODELS'] + "/icon/build_lnd/experiments/jsbalone_R2B4_sfa/jsbalone_R2B4_sfa_lnd_basic_ml_2000*"
-data = []
-for each in sorted(glob.glob(src)):
-    tmp = xr.open_dataset(each)
-    time = [dt.datetime.strptime("%s" % each.data, "%Y%m%d.%f") for each in tmp.time]
-    tmp['time'] = time
-    data.append(tmp['pheno_lai_veg'])
+def plot_season(ax, data):
+    data.sum(dim='ncells').plot()
+    ax.set_ylabel("LAI")
+    ax.set_xlabel("Time")
 
-data = xr.concat(data, dim='time')
-# Plot it
-f, ax = plt.subplots(3,1, sharex=True, sharey=True)
+def read_data(src):
+    data = []
+    for each in sorted(glob.glob(src)):
+        tmp = xr.open_dataset(each)
+        time = [dt.datetime.strptime("%s" % each.data, "%Y%m%d.%f") for each in tmp.time]
+        tmp['time'] = time
+        data.append(tmp['pheno_lai_veg'])
 
-for idata, iax in zip((data.sel(time='2000-02-01'),data.sel(time='2000-06-15'), data.sel(time='2000-12-01')), ax):
-    plot(iax, idata)
-    
-fig2 = plt.figure()
-data.sum(dim='ncells').plot()
-ax21 = fig2.gca()
-ax21.set_ylabel("LAI")
-ax21.set_xlabel("Time")
+    data = xr.concat(data, dim='time')
+    return(data)
+
+def main():
+    plt.close('all')
+    src = os.environ['MODELS'] + "/icon/build_lnd/experiments/jsbalone_R2B4_sfa/jsbalone_R2B4_sfa_lnd_basic_ml_2000*"
+    data = read_data(src)
+    # Plot it
+    f, ax = plt.subplots(3,1, sharex=True, sharey=True)
+
+    for idata, iax in zip((data.sel(time='2000-02-01'),data.sel(time='2000-06-15'), data.sel(time='2000-12-01')), ax):
+        plot_global(iax, idata)
+        
+    f2, ax2 = plt.subplots(1)
+
+    plot_season(ax2, data)
+
+    plt.show(block=False)
+    #plt.savefig("jsbach_standalone_test.png")
 
 
-
-
-plt.show(block=False)
-plt.savefig("jsbach_standalone_test.png")
+if __name__ == "__main__":
+    main()
