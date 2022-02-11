@@ -66,7 +66,7 @@ calendar="proleptic gregorian"  # '365 day year' or '360 day year' or 'proleptic
 # start and end date+time
 # -----------------------
 start_date=${start_date:="2000-01-01T00:00:00Z"}
-end_date=${end_date:="2001-01-01T00:00:00Z"}
+end_date=${end_date:="2000-01-02T00:00:00Z"}
 
 # model timestep
 #---------------
@@ -128,7 +128,7 @@ forcing_writeout_factor="1"   # Normally 1, but if the coupled forcing run did n
 # (3) Define the model configuration
 
 # JSBACH settings
-jsbach_usecase=jsbach_hbp    # jsbach_hbp or jsbach_lite or jsbach_pfts
+jsbach_usecase=jsbach_pfts    # jsbach_hbp or jsbach_lite or jsbach_pfts
 jsbach_with_lakes=no
 jsbach_with_hd=no
 jsbach_with_carbon=no        # yes needs jsbach_pfts usecase
