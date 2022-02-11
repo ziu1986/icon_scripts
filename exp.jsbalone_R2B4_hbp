@@ -566,7 +566,7 @@ if [[ "${jsbach_use_jedi}" == yes ]]
 then
   add_link_file /home/mpim/m300557/TOOL/SCRIPTS/tree_c3_c4_311_cover_lctlib_nlct21_spc250.def   ./lctlib_nlct21.def
 else
-  add_link_file ${basedir}/externals/jsbach/data/lctlib_nlct21.def              ./lctlib_nlct21.def
+  add_link_file ${basedir}/externals/jsbach/data/lctlib_nlct21_copy.def              ./lctlib_nlct.def
 fi
 
 # range of years for yearly files
