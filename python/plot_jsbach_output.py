@@ -69,18 +69,22 @@ def main():
     config = init("config_plot_jsb_output.yml")
 
     src_base = os.environ['MODELS'] + '/icon/'
-    
     b_print = config["print"]
     b_diff = config["diff"]
+
+    if b_diff:
+        outfile_name = "diff" + '_' + config["outfile"]
+    else:
+        exp = config['src']
+        outfile_name = exp[exp.find("jsbalone_R2B4")+14:exp.find("jsbalone_R2B4")+26] + '_' + config["outfile"]
+        print(outfile_name)
   
     data = read_data(src_base + config["src"])
-    
     if b_diff:
         data = read_data(src_base + config["src2"]) - data
 
     # Plot it
     f, ax = plt.subplots(3,1, sharex=True, sharey=True)
-    
     f.canvas.set_window_title("lai_global_map")
 
     for idata, iax in zip((data.sel(time='2000-02-01'),data.sel(time='2000-06-15'), data.sel(time='2000-12-01')), ax):
@@ -94,7 +98,7 @@ def main():
     plt.show(block=False)
 
     if b_print:
-        f.savefig("jsbach_standalone_test.png")
+        f.savefig(outfile_name)
 
 
 if __name__ == "__main__":
