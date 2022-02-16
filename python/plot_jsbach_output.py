@@ -42,7 +42,7 @@ def plot_season(ax, data, **kwargs):
         ax.set_ylabel("$\Delta$LAI")
     else:
         ax.set_ylabel("LAI")
-    ax.set_xlabel("Time")
+    #ax.set_xlabel("Time")
 
 def read_data(src):
     data = []
@@ -73,11 +73,13 @@ def main():
     b_diff = config["diff"]
 
     if b_diff:
-        outfile_name = "diff" + '_' + config["outfile"]
+        exp1 = config['src']
+        exp2 = config['src2'] 
+        outfile_name = "diff_" + exp1[exp1.find("/")+1:exp1.rfind("/")] + '-' + exp2[exp2.find("/")+1:exp2.rfind("/")] + config["outfile"]
     else:
         exp = config['src']
-        outfile_name = exp[exp.find("jsbalone_R2B4")+14:exp.find("jsbalone_R2B4")+26] + '_' + config["outfile"]
-        print(outfile_name)
+        outfile_name = exp[exp.find("/")+1:exp.rfind("/")] + config["outfile"]
+        
   
     data = read_data(src_base + config["src"])
     if b_diff:
@@ -90,15 +92,17 @@ def main():
     for idata, iax in zip((data.sel(time='2000-02-01'),data.sel(time='2000-06-15'), data.sel(time='2000-12-01')), ax):
         plot_global(iax, idata, diff=b_diff)
         
-    f2, ax2 = plt.subplots(1)
-    f2.canvas.set_window_title("lai_global_time")
+    f2, ax2 = plt.subplots(1, figsize=(10,6))
+    f2.canvas.set_window_title("lai_global_annual")
 
     plot_season(ax2, data, diff=b_diff)
-
+    plt.tight_layout()
     plt.show(block=False)
 
     if b_print:
-        f.savefig(outfile_name)
+        print(outfile_name)
+        f.savefig('map' + outfile_name)
+        f2.savefig('annual' + outfile_name)
 
 
 if __name__ == "__main__":
