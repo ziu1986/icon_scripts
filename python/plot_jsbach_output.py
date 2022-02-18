@@ -10,7 +10,8 @@ import datetime as dt
 def plot_global(ax, data, **kwargs):
     x = data['clon'].data
     y = data['clat'].data
-    lai = data.data
+    var = data.data
+    label = kwargs.pop('label', data.name)
 
     b_diff = kwargs.pop('diff', False)
     if b_diff:
@@ -22,9 +23,9 @@ def plot_global(ax, data, **kwargs):
         norm = None
         level = 20
 
-    img2 = ax.tricontourf(x,y,lai, level, norm=norm, cmap=map) # choose 20 contour levels, just to show how good its interpolation is
+    img2 = ax.tricontourf(x,y,var, level, norm=norm, cmap=map) # choose 20 contour levels, just to show how good its interpolation is
     cbar = plt.colorbar(img2, ax=ax)
-    cbar.set_label("LAI")
+    cbar.set_label("%s" % (label))
    
     ax.set_yticks(np.arange(-np.pi/2, np.pi/2+0.1, np.pi/4))
     ax.set_yticklabels(np.arange(-90,91,180/4.))
@@ -37,20 +38,21 @@ def plot_global(ax, data, **kwargs):
 
 def plot_season(ax, data, **kwargs):
     b_diff = kwargs.pop('diff', False)
+    label = kwargs.pop('label', data.name)
     data.sum(dim='ncells').plot()
     if b_diff:
-        ax.set_ylabel("$\Delta$LAI")
+        ax.set_ylabel("$\Delta$%s" % (label))
     else:
-        ax.set_ylabel("LAI")
+        ax.set_ylabel("%s" % label)
     #ax.set_xlabel("Time")
 
-def read_data(src):
+def read_data(src, var):
     data = []
     for each in sorted(glob.glob(src)):
         tmp = xr.open_dataset(each)
         time = [dt.datetime.strptime("%s" % each.data, "%Y%m%d.%f") for each in tmp.time]
         tmp['time'] = time
-        data.append(tmp['pheno_lai_veg'])
+        data.append(tmp[var])
 
     data = xr.concat(data, dim='time')
     return(data)
@@ -80,22 +82,24 @@ def main():
         exp = config['src']
         outfile_name = exp[exp.find("/")+1:exp.rfind("/")] + config["outfile"]
         
-  
-    data = read_data(src_base + config["src"])
+    variable = 'assimi_gross_assimilation_veg' #pheno_lai_veg
+    label = "GPP veg"
+
+    data = read_data(src_base + config["src"], var=variable)
     if b_diff:
-        data = read_data(src_base + config["src2"]) - data
+        data = read_data(src_base + config["src2"], var=variable) - data
 
     # Plot it
     f, ax = plt.subplots(3,1, sharex=True, sharey=True)
-    f.canvas.set_window_title("lai_global_map")
+    f.canvas.set_window_title("global_map")
 
     for idata, iax in zip((data.sel(time='2000-02-01'),data.sel(time='2000-06-15'), data.sel(time='2000-12-01')), ax):
-        plot_global(iax, idata, diff=b_diff)
+        plot_global(iax, idata, diff=b_diff, label=label)
         
     f2, ax2 = plt.subplots(1, figsize=(10,6))
-    f2.canvas.set_window_title("lai_global_annual")
+    f2.canvas.set_window_title("global_sum_annual_cycle")
 
-    plot_season(ax2, data, diff=b_diff)
+    plot_season(ax2, data, diff=b_diff, label=label)
     plt.tight_layout()
     plt.show(block=False)
 
