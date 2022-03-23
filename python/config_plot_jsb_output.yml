@@ -1,8 +1,0 @@
-diff: True
-print: True
-outfile: ".png"
-
-src: 
-  "run/jsbalone_R2B4_sfa_20220121/jsbalone_*_lnd_basic_ml_2000*"
-src2:
-  "run/jsbalone_R2B4_hbp_20220215/jsbalone_*_lnd_basic_ml_2000*"
