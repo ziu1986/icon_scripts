@@ -1,0 +1,8 @@
+input:
+  "/data/icon/pool/data/ICON/grids/private/jsbach/mpim/0013/land/r0001/*11pfts*"
+  
+new_variables:
+  [ 'fract_pft11', 'fract_pft12', 'fract_pft13' ]
+
+fractions:
+  [ 0.7, 0.3*0.75, 0.3*0.25 ]

@@ -16,16 +16,25 @@ def read_data(src):
         data.append(xr.open_dataset(each))
     return data
 
+def init(config_file):
+    plt.close('all')
+    # Read configuration
+    with open(r'%s' % config_file) as file:
+        config_list = yaml.load(file, Loader=yaml.FullLoader)
+    file.close()
+    return(config_list)
 
-src = os.environ['DATA'] + "/icon/pool/data/ICON/grids/private/jsbach/mpim/0013/land/r0001/*11pfts*"
+def main():
+    config = init('config.yml')
+    src = config['input']
 
-fracts = np.array((0.7, 0.3*0.75, 0.3*0.25))
-new_names = ('fract_pft11', 'fract_pft12', 'fract_pft13')
+    fracts = np.array((0.7, 0.3*0.75, 0.3*0.25))
+    new_names = ('fract_pft11', 'fract_pft12', 'fract_pft13')
 
-data = read_data(src)
+    data = read_data(src)
 
-for ifract, iname in zip(fracts, new_names):
-    pft_tmp = extend_landfrac(data[0], "fract_pft11", iname, ifract)
-    data[0][iname] = pft_tmp
+    for ifract, iname in zip(fracts, new_names):
+        pft_tmp = extend_landfrac(data[0], "fract_pft11", iname, ifract)
+        data[0][iname] = pft_tmp
 
-data[0].to_netcdf("bc_land_frac_13pfts_1979.nc")
+    data[0].to_netcdf("bc_land_frac_13pfts_1979.nc")
