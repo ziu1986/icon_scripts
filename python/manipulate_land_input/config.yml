@@ -1,14 +1,18 @@
 input:
-  "/data/icon/pool/data/ICON/grids/private/jsbach/mpim/0013/land/r0001/*11pfts*"
-
+  #"/data/icon/pool/data/ICON/grids/private/jsbach/mpim/0013/land/r0001/*11pfts*"
+  "/data/icon/LUH_scaled_transitions_T63_2000.nc"
 output:
-  "bc_land_frac_13pfts_1979.nc"
+  #"bc_land_frac_13pfts_1979.nc"
+  "hbp_LUH_scaled_transitions_T63_2000.nc"
 
 old_variable:
-  'fract_pft11'
+  #'fract_pft11'
+  "crop2natural"
 
 new_variables:
-  [ 'fract_pft12', 'fract_pft13' ]
+  #[ 'fract_pft12', 'fract_pft13' ]
+  [ "crop2hbp" ]
 
 fractions:
-  [ 0.7, 0.225, 0.075 ]
+  #[ 0.7, 0.225, 0.075 ]
+  [ 0.98 0.02 ]

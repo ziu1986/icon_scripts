@@ -14,7 +14,8 @@ def extend_landfrac(data, var_name, var_name_new, fract):
 def read_data(src):
     data = []
     for each in sorted(glob.glob(src)):
-        data.append(xr.open_dataset(each))
+        print("Reading %s" % (src))
+        data.append(xr.open_dataset(each, decode_times=False))
     return data
 
 def init(config_file):
@@ -39,10 +40,11 @@ def main():
     data = read_data(src)
 
     for ifract, iname in zip(fracts, names):
-        pft_tmp = extend_landfrac(data[0], old_name, iname, ifract)
-        data[0][iname] = pft_tmp
+        print(data[0][old_name])
+        #pft_tmp = extend_landfrac(data[0], old_name, iname, ifract)
+        #data[0][iname] = pft_tmp
 
-    data[0].to_netcdf(target)
+    #data[0].to_netcdf(target)
 
 if __name__ == "__main__":
     main()
