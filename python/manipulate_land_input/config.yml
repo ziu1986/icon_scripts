@@ -3,12 +3,12 @@ input:
 
 output:
   "bc_land_frac_13pfts_1979.nc"
-  
+
 old_variable:
   'fract_pft11'
 
 new_variables:
-  [ 'fract_pft11', 'fract_pft12', 'fract_pft13' ]
+  [ 'fract_pft12', 'fract_pft13' ]
 
 fractions:
   [ 0.7, 0.225, 0.075 ]
