@@ -29,9 +29,9 @@ def main():
     config = init('config.yml')
     src = config['input']
     target = config['output']
-    fracts = config['fractions'] #np.array((0.7, 0.3*0.75, 0.3*0.25))
+    fracts = config['fractions']
     old_name = config['old_variable']
-    new_names = config['new_variables']#('fract_pft11', 'fract_pft12', 'fract_pft13')
+    new_names = config['new_variables']
 
     names = new_names
     names.insert(0,old_name)
