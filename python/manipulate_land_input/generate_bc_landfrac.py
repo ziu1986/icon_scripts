@@ -1,6 +1,7 @@
 import os, sys, glob
 import numpy as np
 import xarray as xr
+import yaml
 
 def extend_landfrac(data, var_name, var_name_new, fract):
     xr.set_options(keep_attrs=True)
@@ -17,7 +18,6 @@ def read_data(src):
     return data
 
 def init(config_file):
-    plt.close('all')
     # Read configuration
     with open(r'%s' % config_file) as file:
         config_list = yaml.load(file, Loader=yaml.FullLoader)
@@ -27,14 +27,19 @@ def init(config_file):
 def main():
     config = init('config.yml')
     src = config['input']
+    target = config['output']
 
-    fracts = np.array((0.7, 0.3*0.75, 0.3*0.25))
-    new_names = ('fract_pft11', 'fract_pft12', 'fract_pft13')
+    fracts = config['fractions'] #np.array((0.7, 0.3*0.75, 0.3*0.25))
+    old_name = config['old_variable']
+    new_names = config['new_variables']#('fract_pft11', 'fract_pft12', 'fract_pft13')
 
     data = read_data(src)
 
     for ifract, iname in zip(fracts, new_names):
-        pft_tmp = extend_landfrac(data[0], "fract_pft11", iname, ifract)
+        pft_tmp = extend_landfrac(data[0], old_name, iname, ifract)
         data[0][iname] = pft_tmp
 
-    data[0].to_netcdf("bc_land_frac_13pfts_1979.nc")
+    data[0].to_netcdf(target)
+
+if __name__ == "__main__":
+    main()
