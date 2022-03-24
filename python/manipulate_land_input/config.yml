@@ -1,5 +1,5 @@
 # File lists not yet supported
-# Change configuration file name in python script
+# Call: python manipulate_land_input.py
 input:
   "/data/icon/pool/data/ICON/grids/private/jsbach/mpim/0013/land/r0001/*11pfts*"
 

@@ -1,5 +1,5 @@
 # File lists not yet supported
-# Change configuration file name in python script
+# Call: python manipulate_land_input.py config_transitions.yml
 input:
   "/data/icon/LUH_scaled_transitions_T63_2000.nc"
 output:
