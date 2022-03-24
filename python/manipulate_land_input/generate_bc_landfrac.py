@@ -35,7 +35,12 @@ def save_data(data, target):
 
 def main():
     # Configuration
-    config = init('config.yml')
+    if len(sys.argv) == 1:
+        config_file = 'config.yml'
+    else:
+        config_file = sys.argv[1]
+
+    config = init(config_file)
     src = config['input']
     target = config['output']
     fracts = config['fractions']
