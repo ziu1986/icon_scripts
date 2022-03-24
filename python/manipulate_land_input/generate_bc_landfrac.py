@@ -46,15 +46,20 @@ def main():
     names.insert(0,old_name)
 
     data = read_data(src)
-    
+
+    if len(data) > 1:
+        print("List of files not yet supported...")
+        exit(1)
+
     print("Converting...")
 
-    for ifract, iname in zip(fracts, names):
-        print("%s x %1.3f -> %s" % (old_name, ifract, iname))
-        pft_tmp = extend_frac(data[0], old_name, iname, ifract)
-        data[0][iname] = pft_tmp
+    for idata in data:
+        for ifract, iname in zip(fracts, names):
+            print("%s x %1.3f -> %s" % (old_name, ifract, iname))
+            pft_tmp = extend_frac(idata, old_name, iname, ifract)
+            idata[iname] = pft_tmp
 
-    save_data(data[0], target)
+        save_data(idata, target)
 
 if __name__ == "__main__":
     main()
