@@ -16,11 +16,13 @@ def extend_frac(data, var_name, var_name_new, fract):
     return var_new
 
 def read_data(src):
-    data = []
+    datalist = []
+    infilenamelist = []
     for each in sorted(glob.glob(src)):
         print("Reading %s" % (src))
-        data.append(xr.open_dataset(each, decode_times=False))
-    return data
+        datalist.append(xr.open_dataset(each, decode_times=False))
+        infilenamelist.append(each)
+    return datalist, infilenamelist
 
 def init(config_file):
     # Read configuration
@@ -32,6 +34,14 @@ def init(config_file):
 def save_data(data, target):
     print("Saving... %s" % (target))
     data.to_netcdf(target)
+
+def generate_outname(infilename, outfilename, **karg):
+    if outfilename == "":
+        return("new_" + os.path.basename(infilename))
+    elif outfilename.find('.nc') < 0:
+        return(outfilename + '_' + os.path.basename(infilename))
+    else:
+        return(outfilename)
 
 def main():
     # Configuration
@@ -50,21 +60,17 @@ def main():
     names = new_names
     names.insert(0,old_name)
 
-    data = read_data(src)
-
-    if len(data) > 1:
-        print("List of files not yet supported...")
-        exit(1)
+    data, infilenamelist = read_data(src)
 
     print("Converting...")
 
-    for idata in data:
+    for idata, iifile in zip(data, infilenamelist):
         for ifract, iname in zip(fracts, names):
             print("%s x %1.3f -> %s" % (old_name, ifract, iname))
             pft_tmp = extend_frac(idata, old_name, iname, ifract)
             idata[iname] = pft_tmp
 
-        save_data(idata, target)
+        save_data(idata, generate_outname(iifile, target))
 
 if __name__ == "__main__":
     main()

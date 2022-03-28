@@ -1,9 +1,12 @@
 # File lists not yet supported
 # Call: python manipulate_land_input.py config_transitions.yml
+# Supports list of input files using regular expressions
+# In case of multiple input files provide prefix for output or leave empty
+# In case of single input file provide output file name or leave empty
 input:
-  "/data/icon/LUH_scaled_transitions_T63_2000.nc"
+  "/data/icon/LUH_scaled_transitions_T63_*.nc"
 output:
-  "hbp_LUH_scaled_transitions_T63_2000.nc"
+  "hbp"
 
 old_variable:
   "crop2natural"
